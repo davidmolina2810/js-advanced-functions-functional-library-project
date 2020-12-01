@@ -48,15 +48,72 @@ const fi = (function() {
     },
 
     find: function(collection, predicate) {
-      const collectionCopy = (collection instanceof Array) ? collection.slice() : Object.values(collection)
-      for (i = 0; i < collectionCopy.length; i++) {
-        if (predicate(collectionCopy[i])) {
-          return collectionCopy[i]
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection)
+      }
+      for (let i = 0; i < collection.length; i++) {
+        if (predicate(collection[i])) {
+          return collection[i]
         }
       }
       return undefined 
     },
 
+    filter: function(collection, predicate) {
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection)
+      }
+      const filtered = []
+      for (let i = 0; i < collection.length; i++) {
+        if (predicate(collection[i])) {
+          filtered.push(collection[i])
+        }
+      }
+      return filtered
+    },
+
+    size: function(collection) {
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection)
+      }
+      let total = 0
+      for (let i = 0; i < collection.length; i++) {
+        total += 1
+      }
+      return total
+    },
+
+    first: function(array, n=1) {
+      let newArr = []
+      for (let i = 0; i < n; i++) {
+        newArr.push(array[i])
+      }
+      if (newArr.length === 1) {
+        return newArr[0]
+      }
+      return newArr
+    }, 
+
+    last: function(array, n=1) {
+      let newArr = []
+      if (n === 1) {
+        return array.pop()
+      }
+      for (let i = 0; i < n; i++) {
+        newArr.unshift(array.pop())
+      }
+      return newArr
+    }, 
+
+    compact: function(array) {
+      const falsies = [false, null, 0, "", undefined, NaN]
+      return array.filter(el => !falsies.includes(el))
+    }, 
+
+    sortBy: function(array, callback) {
+      const newArr = array.slice()
+      return newArr.sort((a,b) => { return callback(a) - callback(b)})
+    }
 
   }
 })()
